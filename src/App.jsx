@@ -12,17 +12,23 @@ export default function App() {
   });
   
   async function getISSCoords() {
-    const response = await fetch(URL);
-    const data = await response.json();
-    console.log(data);
+    try {
+      const response = await fetch(URL);
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
 
-    setCoords({longitude: data.longitude, latitude: data.latitude});
+        setCoords({longitude: data.longitude, latitude: data.latitude});
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   useEffect(() => {
-    const every5Sec = setInterval(() => getISSCoords(), 5000); 
+    const timer = setInterval(() => getISSCoords(), 5000); 
     
-    return (() => {clearInterval(every5Sec)});
+    return (() => clearInterval(timer));
   }, []);
 
   return (
